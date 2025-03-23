@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import axios from 'axios';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -34,7 +35,12 @@ const LoginPage = () => {
       toast.success("You've successfully logged in.");
       setLocation('/');
     } catch (error) {
-      toast.error('There was an error logging in');
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || 'Invalid email or password';
+        toast.error(errorMessage);
+      } else {
+        toast.error('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
