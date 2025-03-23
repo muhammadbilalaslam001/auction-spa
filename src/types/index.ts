@@ -1,5 +1,6 @@
 // User-related types
 export interface User {
+    data: any;
     id: string;
     email: string;
     name: string;
@@ -15,7 +16,8 @@ export interface User {
   }
   
   export interface Auction {
-    data: Auction;
+    data: any;
+    length:string,
     id: string;
     title: string;
     description: string;
@@ -51,7 +53,7 @@ export interface User {
   
   // Bid-related types
   export interface Bid {
-    data: Bid;
+    data: any;
     id: string;
     amount: number;
     auctionId: string;

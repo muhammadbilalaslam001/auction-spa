@@ -37,21 +37,11 @@ const MyAuctionsPage = () => {
   const [createAuctionOpen, setCreateAuctionOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"ALL" | AuctionStatus>("ALL");
   // Filter auctions by the current user and the selected tab
-  // const filteredAuctions = auctions?.data?.filter((auction:Auction) => {
-  //   const isOwnAuction = auction.userId === user?.data?.id;
-  //   const matchesTab = selectedTab === "ALL" || auction.status === selectedTab;
-  //   return isOwnAuction && matchesTab;
-  // });
-
-  const filteredAuctions =
-  auctions && "items" in auctions
-    ? auctions.items.filter((auction: Auction) => {
-        const isOwnAuction = auction.userId === user?.id;
-        const matchesTab =
-          selectedTab === "ALL" || auction.status === selectedTab;
-        return isOwnAuction && matchesTab;
-      })
-    : [];
+  const filteredAuctions = auctions?.filter((auction:Auction) => {
+    const isOwnAuction = auction.userId === user?.id;
+    const matchesTab = selectedTab === "ALL" || auction.status === selectedTab;
+    return isOwnAuction && matchesTab;
+  });
 
   // Count auctions by status
   const countByStatus = {

@@ -4,18 +4,24 @@ import { bidsApi } from "@/api/api";
 
 export function useBids(auctionId?: string) {
   const queryClient = useQueryClient();
-
+  
   // Get bids for an auction
-  const { data, isLoading, error, refetch } = useQuery({
+  const {
+    data, 
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["bids", auctionId],
     queryFn: async () => {
       const response = await bidsApi.getByAuctionId(auctionId!);
       return response;
     },
     enabled: !!auctionId,
-  });
+  });  
 
   const bids = data || [];
+
 
   // Create bid mutation
   const {

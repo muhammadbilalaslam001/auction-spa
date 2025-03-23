@@ -1,25 +1,3 @@
-// import React from 'react';
-// import { BrowserRouter as Router } from 'react-router-dom';
-// import { AuthProvider } from '@/context/AuthContext';
-// import { AppRoutes } from '@/router';
-
-// const App: React.FC = () => {
-//   return (
-//     <AuthProvider>
-//       <Router>
-//         <div className="min-h-screen bg-gray-100">
-//           <AppRoutes />
-//         </div>
-//       </Router>
-//     </AuthProvider>
-//   );
-// };
-
-// export default App;
-
-
-
-
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -41,7 +19,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/login" component={LoginPage} />
-      <Route path="/auth">{user ? <Route path="/" /> : <RegisterPage />}</Route>
+      <Route path="/register">{user ? <Route path="/" /> : <RegisterPage />}</Route>
       <Route path="/auction/:id" component={AuctionPage} />
       <Route path="/my-auctions" component={MyAuctionsPage} />
       <Route component={NotFound} />

@@ -104,7 +104,7 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
           Please sign in to place a bid.
         </p>
         <Button asChild className="mt-2 w-full">
-          <Link href="/auth">Sign In</Link>
+          <Link href="/login">Sign In</Link>
         </Button>
       </div>
     );

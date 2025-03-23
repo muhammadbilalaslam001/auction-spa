@@ -78,7 +78,7 @@ const MobileMenu = ({ isOpen, toggle }: MobileMenuProps) => {
         <div className="pt-4 pb-3 border-t border-gray-200">
           <div className="px-4">
             <Button asChild className="w-full" onClick={toggle}>
-              <Link href="/auth">Sign In</Link>
+              <Link href="/login">Sign In</Link>
             </Button>
           </div>
         </div>

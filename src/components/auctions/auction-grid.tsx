@@ -13,9 +13,8 @@ const AuctionGrid = ({ auctions = [], isLoading }:any) => {
       </div>
     );
   }
-  const auctionsNew=auctions?.data ||[]
 
-  if (!auctionsNew) {
+  if (!auctions) {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium text-gray-900">No auctions found</h3>
@@ -25,7 +24,7 @@ const AuctionGrid = ({ auctions = [], isLoading }:any) => {
   }
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {auctionsNew?.map((auction:Auction) => (
+      {auctions?.map((auction:Auction) => (
         <AuctionCard key={auction.id} auction={auction} />
       ))}
     </div>

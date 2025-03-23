@@ -24,7 +24,7 @@ export const ProtectedRoute = ({ path }: ProtectedRouteProps) => {
   if (!user) {
     return (
       <Route path={path}>
-        <Redirect to="/auth" />
+        <Redirect to="/login" />
       </Route>
     );
   }

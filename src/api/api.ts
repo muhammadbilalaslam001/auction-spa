@@ -35,7 +35,7 @@ export const authApi = {
   getCurrentUser: async () => {
     try {
       const response = await api.get<User>("/api/users/me");
-      return response.data;
+      return response?.data?.data;
     } catch (error) {
       return null;
     }
@@ -50,10 +50,10 @@ export const auctionsApi = {
     status?: AuctionStatus;
     count?: boolean;
   }) => {
-    const response = await api.get<{ items: Auction[], total: number }>("/api/auctions", { 
+    const response = await api.get<Auction>("/api/auctions", { 
       params: { ...params, count: true } 
     });
-    return response.data;
+    return response?.data?.data;
   },
   
   getById: async (id: string) => {
@@ -90,8 +90,8 @@ export const bidsApi = {
   },
   
   getByAuctionId: async (auctionId: string) => {
-    const response = await api.get<Bid[]>(`/api/bids/auction/${auctionId}`);
-    return response.data;
+    const response = await api.get<Bid>(`/api/bids/auction/${auctionId}`);
+    return response.data.data;
   },
   
   getUserBids: async () => {
