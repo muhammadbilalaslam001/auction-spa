@@ -24,7 +24,11 @@ const LoginPage = () => {
   const { login } = useAuth();
   const [, setLocation] = useLocation();
 
-  const loginForm = useForm<LoginFormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
@@ -40,17 +44,28 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <Card className="w-96">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <Card className="w-96 shadow-lg rounded-lg p-6 bg-white">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold">Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
-            <Input {...loginForm.register("email")} placeholder="Email" type="email" />
-            <Input {...loginForm.register("password")} placeholder="Password" type="password" />
-            <Button type="submit" className="w-full">Login</Button>
+          <form onSubmit={handleSubmit(onLoginSubmit)} className="space-y-4">
+            <div>
+              <Input {...register("email")} placeholder="Email" type="email" className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+            </div>
+            <div>
+              <Input {...register("password")} placeholder="Password" type="password" className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+            </div>
+            <Button type="submit" className="w-full text-white py-2 rounded-md cursor-pointer" disabled={isSubmitting}>
+              {isSubmitting ? "Logging in..." : "Login"}
+            </Button>
           </form>
+          <p className="text-center text-sm mt-4">
+            Don't have an account? <span className="text-blue-600 cursor-pointer" onClick={() => setLocation("/register")}>Create Account</span>
+          </p>
         </CardContent>
       </Card>
     </div>
