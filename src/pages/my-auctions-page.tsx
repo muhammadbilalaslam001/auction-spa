@@ -1,16 +1,11 @@
-import { useState } from "react";
-import { Link } from "wouter";
-import { useAuctions } from "@/hooks/useAuctions";
-import { useAuth } from "@/hooks/useAuth";
-import { Auction, AuctionStatus } from "@/types";
-import { formatCurrency, formatTimeLeft, formatDate } from "@/utils/format";
-import { StatusBadge } from "../components/shared/status-badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { useState } from 'react';
+import { Link } from 'wouter';
+import { useAuctions } from '@/hooks/useAuctions';
+import { useAuth } from '@/hooks/useAuth';
+import { Auction, AuctionStatus } from '@/types';
+import { formatCurrency, formatTimeLeft, formatDate } from '@/utils/format';
+import { StatusBadge } from '../components/shared/status-badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -18,37 +13,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription
-} from "@/components/ui/dialog";import { toast } from "sonner";
-import CreateAuctionForm from "@/components/auctions/create-auction-form";
-import { Loader2 } from "lucide-react";
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import CreateAuctionForm from '@/components/auctions/create-auction-form';
+import { Loader2 } from 'lucide-react';
 
 const MyAuctionsPage = () => {
   const { user } = useAuth();
   const { auctions, isLoading, updateAuctionStatus, isUpdatingStatus } = useAuctions();
   const [createAuctionOpen, setCreateAuctionOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<"ALL" | AuctionStatus>("ALL");
+  const [selectedTab, setSelectedTab] = useState<'ALL' | AuctionStatus>('ALL');
   // Filter auctions by the current user and the selected tab
-  const filteredAuctions = auctions?.filter((auction:Auction) => {
+  const filteredAuctions = auctions?.filter((auction: Auction) => {
     const isOwnAuction = auction.userId === user?.id;
-    const matchesTab = selectedTab === "ALL" || auction.status === selectedTab;
+    const matchesTab = selectedTab === 'ALL' || auction.status === selectedTab;
     return isOwnAuction && matchesTab;
   });
 
   // Count auctions by status
   const countByStatus = {
     ALL: filteredAuctions?.length,
-    ACTIVE: filteredAuctions?.filter((a:any) => a.status === "ACTIVE").length,
-    DRAFT: filteredAuctions?.filter((a:any) => a.status === "DRAFT").length,
-    COMPLETED: filteredAuctions?.filter((a:any) => a.status === "COMPLETED").length,
+    ACTIVE: filteredAuctions?.filter((a: any) => a.status === 'ACTIVE').length,
+    DRAFT: filteredAuctions?.filter((a: any) => a.status === 'DRAFT').length,
+    COMPLETED: filteredAuctions?.filter((a: any) => a.status === 'COMPLETED').length,
   };
 
   const handlePublish = async (auction: Auction) => {
@@ -57,17 +53,17 @@ const MyAuctionsPage = () => {
         id: auction.id,
         status: AuctionStatus.ACTIVE,
       });
-      toast("Your auction is now live and accepting bids.");
+      toast('Your auction is now live and accepting bids.');
     } catch (error: any) {
-      toast("Failed to publish auction");
+      toast('Failed to publish auction');
     }
   };
 
   const getEndDateDisplay = (auction: Auction) => {
-    if (auction.status === "DRAFT") {
-      return "Not started";
-    } else if (auction.status === "ACTIVE") {
-      return formatTimeLeft(new Date(auction.endDate)) + " remaining";
+    if (auction.status === 'DRAFT') {
+      return 'Not started';
+    } else if (auction.status === 'ACTIVE') {
+      return formatTimeLeft(new Date(auction.endDate)) + ' remaining';
     } else {
       return `Ended on ${formatDate(new Date(auction.endDate))}`;
     }
@@ -81,28 +77,21 @@ const MyAuctionsPage = () => {
             <h1 className="text-2xl font-semibold text-gray-900">My Auctions</h1>
             <p className="mt-1 text-sm text-gray-500">Manage your auction listings</p>
           </div>
-          <Button 
-            onClick={() => setCreateAuctionOpen(true)}
-          >
+          <Button onClick={() => setCreateAuctionOpen(true)}>
             <span className="text-xs mr-2">+</span>
             Create Auction
           </Button>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value as "ALL" | AuctionStatus)}>
+        <Tabs
+          value={selectedTab}
+          onValueChange={value => setSelectedTab(value as 'ALL' | AuctionStatus)}
+        >
           <TabsList className="w-full max-w-md grid grid-cols-4">
-            <TabsTrigger value="ALL">
-              All ({countByStatus.ALL})
-            </TabsTrigger>
-            <TabsTrigger value="ACTIVE">
-              Active ({countByStatus.ACTIVE})
-            </TabsTrigger>
-            <TabsTrigger value="DRAFT">
-              Drafts ({countByStatus.DRAFT})
-            </TabsTrigger>
-            <TabsTrigger value="COMPLETED">
-              Completed ({countByStatus.COMPLETED})
-            </TabsTrigger>
+            <TabsTrigger value="ALL">All ({countByStatus.ALL})</TabsTrigger>
+            <TabsTrigger value="ACTIVE">Active ({countByStatus.ACTIVE})</TabsTrigger>
+            <TabsTrigger value="DRAFT">Drafts ({countByStatus.DRAFT})</TabsTrigger>
+            <TabsTrigger value="COMPLETED">Completed ({countByStatus.COMPLETED})</TabsTrigger>
           </TabsList>
 
           <TabsContent value={selectedTab} className="mt-6">
@@ -131,11 +120,21 @@ const MyAuctionsPage = () => {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell><Skeleton className="h-6 w-16" /></TableCell>
-                        <TableCell><Skeleton className="h-5 w-20" /></TableCell>
-                        <TableCell><Skeleton className="h-5 w-8" /></TableCell>
-                        <TableCell><Skeleton className="h-5 w-32" /></TableCell>
-                        <TableCell className="text-right"><Skeleton className="h-8 w-24 ml-auto" /></TableCell>
+                        <TableCell>
+                          <Skeleton className="h-6 w-16" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-5 w-20" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-5 w-8" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="h-5 w-32" />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Skeleton className="h-8 w-24 ml-auto" />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -145,7 +144,7 @@ const MyAuctionsPage = () => {
               <div className="text-center py-12 bg-white shadow rounded-lg">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No auctions found</h3>
                 <p className="text-gray-500 mb-6">
-                  {selectedTab === "ALL" 
+                  {selectedTab === 'ALL'
                     ? "You haven't created any auctions yet."
                     : `You don't have any ${selectedTab.toLowerCase()} auctions.`}
                 </p>
@@ -168,7 +167,7 @@ const MyAuctionsPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredAuctions?.map((auction:any) => (
+                    {filteredAuctions?.map((auction: any) => (
                       <TableRow key={auction.id}>
                         <TableCell>
                           <div className="flex items-center">
@@ -192,7 +191,9 @@ const MyAuctionsPage = () => {
                             </div>
                             <div className="ml-4">
                               <div className="font-medium text-gray-900">{auction.title}</div>
-                              <div className="text-gray-500">Created on {formatDate(new Date(auction.createdAt))}</div>
+                              <div className="text-gray-500">
+                                Created on {formatDate(new Date(auction.createdAt))}
+                              </div>
                             </div>
                           </div>
                         </TableCell>
@@ -204,20 +205,22 @@ const MyAuctionsPage = () => {
                             {formatCurrency(auction.currentPrice || auction.startPrice)}
                           </div>
                           <div className="text-gray-500">
-                            {auction.status === "DRAFT" ? "Starting bid" : `${auction.bids?.length || 0} bids`}
+                            {auction.status === 'DRAFT'
+                              ? 'Starting bid'
+                              : `${auction.bids?.length || 0} bids`}
                           </div>
                         </TableCell>
                         <TableCell>{auction.bids?.length || 0}</TableCell>
                         <TableCell>{getEndDateDisplay(auction)}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex space-x-2 justify-end">
-                            {auction.status === "DRAFT" ? (
+                            {auction.status === 'DRAFT' ? (
                               <>
                                 <Button size="sm" variant="outline" asChild>
                                   <Link href={`/auction/${auction.id}`}>Edit</Link>
                                 </Button>
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="outline"
                                   onClick={() => handlePublish(auction)}
                                   disabled={isUpdatingStatus}
@@ -225,7 +228,7 @@ const MyAuctionsPage = () => {
                                   {isUpdatingStatus ? (
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                   ) : (
-                                    "Publish"
+                                    'Publish'
                                   )}
                                 </Button>
                               </>
@@ -247,17 +250,16 @@ const MyAuctionsPage = () => {
       </div>
 
       <Dialog open={createAuctionOpen} onOpenChange={setCreateAuctionOpen}>
-  <DialogContent className="sm:max-w-[500px]">
-    <DialogHeader>
-      <DialogTitle>Create New Auction</DialogTitle>
-      <DialogDescription>
-        Fill in the details below to create a new auction.
-      </DialogDescription>
-    </DialogHeader>
-    <CreateAuctionForm onSuccess={() => setCreateAuctionOpen(false)} />
-  </DialogContent>
-</Dialog>
-
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Create New Auction</DialogTitle>
+            <DialogDescription>
+              Fill in the details below to create a new auction.
+            </DialogDescription>
+          </DialogHeader>
+          <CreateAuctionForm onSuccess={() => setCreateAuctionOpen(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

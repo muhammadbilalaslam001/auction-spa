@@ -1,8 +1,8 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useAuctions } from "../../hooks/useAuctions";
-import { toast } from "sonner";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useAuctions } from '../../hooks/useAuctions';
+import { toast } from 'sonner';
 import {
   Form,
   FormControl,
@@ -10,24 +10,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 // Validation schema
 const formSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  startPrice: z.coerce.number().positive("Starting price must be positive"),
+  title: z.string().min(3, 'Title must be at least 3 characters'),
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+  startPrice: z.coerce.number().positive('Starting price must be positive'),
   endDate: z.string().refine(
-    (val) => {
+    val => {
       const date = new Date(val);
       const now = new Date();
       return date > now;
     },
-    { message: "End date must be in the future" }
+    { message: 'End date must be in the future' }
   ),
 });
 
@@ -39,12 +39,12 @@ interface CreateAuctionFormProps {
 
 const CreateAuctionForm = ({ onSuccess }: CreateAuctionFormProps) => {
   const { createAuction, isCreating } = useAuctions();
-  
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       startPrice: 1,
       endDate: (() => {
         const date = new Date();
@@ -60,17 +60,16 @@ const CreateAuctionForm = ({ onSuccess }: CreateAuctionFormProps) => {
         ...data,
         endDate: new Date(data.endDate),
       });
-      
-      toast("Your auction has been created successfully");
-      
+
+      toast('Your auction has been created successfully');
+
       form.reset();
-      
+
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
-      toast("Failed to create auction. Please try again.",
-       );
+      toast('Failed to create auction. Please try again.');
     }
   };
 
@@ -90,7 +89,7 @@ const CreateAuctionForm = ({ onSuccess }: CreateAuctionFormProps) => {
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="description"
@@ -109,7 +108,7 @@ const CreateAuctionForm = ({ onSuccess }: CreateAuctionFormProps) => {
             </FormItem>
           )}
         />
-        
+
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
           <FormField
             control={form.control}
@@ -118,19 +117,13 @@ const CreateAuctionForm = ({ onSuccess }: CreateAuctionFormProps) => {
               <FormItem>
                 <FormLabel>Starting Price ($)</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="number"
-                    min="0.01"
-                    step="0.01"
-                    placeholder="0.00"
-                    {...field}
-                  />
+                  <Input type="number" min="0.01" step="0.01" placeholder="0.00" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="endDate"
@@ -145,26 +138,19 @@ const CreateAuctionForm = ({ onSuccess }: CreateAuctionFormProps) => {
             )}
           />
         </div>
-        
+
         <div className="flex justify-end space-x-4">
-          <Button 
-            type="button"
-            variant="outline"
-            onClick={onSuccess}
-          >
+          <Button type="button" variant="outline" onClick={onSuccess}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            disabled={isCreating}
-          >
+          <Button type="submit" disabled={isCreating}>
             {isCreating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Creating...
               </>
             ) : (
-              "Create Auction"
+              'Create Auction'
             )}
           </Button>
         </div>

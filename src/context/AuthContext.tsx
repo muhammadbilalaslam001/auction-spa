@@ -1,8 +1,8 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
-import { User } from "@/types";
-import { authApi } from "@/api/api";
-import { cookieUtils } from "@/utils/cookies";
-import { useAuctionSocket } from "@/hooks/useAuctionSocket";
+import { createContext, ReactNode, useState, useEffect } from 'react';
+import { User } from '@/types';
+import { authApi } from '@/api/api';
+import { cookieUtils } from '@/utils/cookies';
+import { useAuctionSocket } from '@/hooks/useAuctionSocket';
 
 interface AuthContextType {
   user: User | null;
@@ -35,15 +35,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const token = cookieUtils.getToken();
 
   const { joinAuction, leaveAuction, disconnect, isConnected } = useAuctionSocket({
-    token: token || "",
+    token: token || '',
     onAuctionUpdate: () => {
-      {}
+      {
+      }
     },
     onConnect: () => {},
     onDisconnect: () => {},
-    onError: (err) => console.error("WebSocket Error:", err),
+    onError: err => console.error('WebSocket Error:', err),
   });
-
 
   useEffect(() => {
     const loadUser = async () => {
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           if (currentUser) setUser(currentUser);
         }
       } catch (err) {
-        console.error("Error loading user:", err);
+        console.error('Error loading user:', err);
         setError(err as Error);
       } finally {
         setIsLoading(false);
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const currentUser = await authApi.getCurrentUser();
       setUser(currentUser);
     } catch (err) {
-      console.error("Login error:", err);
+      console.error('Login error:', err);
       setError(err as Error);
       throw err;
     } finally {
@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const currentUser = await authApi.getCurrentUser();
       setUser(currentUser);
     } catch (err) {
-      console.error("Registration error:", err);
+      console.error('Registration error:', err);
       setError(err as Error);
       throw err;
     } finally {

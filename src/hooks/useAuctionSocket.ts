@@ -29,8 +29,8 @@ export const useAuctionSocket = ({
   // Initialize socket connection
   useEffect(() => {
     if (!token) return;
-    socketRef.current = io(import.meta.env.VITE_API_URL || "http://localhost:3000", {
-      transports: ["websocket"],
+    socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+      transports: ['websocket'],
       auth: { token },
       autoConnect: true,
     });

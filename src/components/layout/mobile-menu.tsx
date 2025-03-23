@@ -1,7 +1,7 @@
-import { Link } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Link } from 'wouter';
+import { useAuth } from '@/hooks/useAuth';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -13,14 +13,14 @@ const MobileMenu = ({ isOpen, toggle }: MobileMenuProps) => {
 
   // Get initials from user name
   const getInitials = (name?: string) => {
-    if (!name) return ""; // Default fallback initial
+    if (!name) return ''; // Default fallback initial
     return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
+      .split(' ')
+      .map(part => part[0])
+      .join('')
       .toUpperCase();
   };
-  
+
   if (!isOpen) return null;
 
   return (
@@ -42,7 +42,6 @@ const MobileMenu = ({ isOpen, toggle }: MobileMenuProps) => {
             >
               My Auctions
             </Link>
-          
           </>
         )}
       </div>

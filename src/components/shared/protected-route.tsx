@@ -1,10 +1,10 @@
-import { useAuth } from "../../hooks/useAuth";
-import { Redirect, Route } from "wouter";
-import { Loader2 } from "lucide-react";
+import { useAuth } from '../../hooks/useAuth';
+import { Redirect, Route } from 'wouter';
+import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   path: string;
-  component: React.ComponentType<any>; 
+  component: React.ComponentType<any>;
 }
 
 export const ProtectedRoute = ({ path, component: Component }: ProtectedRouteProps) => {
@@ -30,7 +30,7 @@ export const ProtectedRoute = ({ path, component: Component }: ProtectedRoutePro
 
   return (
     <Route path={path}>
-      {({ params }:any) => {
+      {({ params }: any) => {
         return <Component {...params} />;
       }}
     </Route>

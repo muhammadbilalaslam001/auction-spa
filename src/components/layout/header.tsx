@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { Link, useLocation } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
-import UserMenu from "./user-menu";
-import MobileMenu from "./mobile-menu";
+import { useState } from 'react';
+import { Link, useLocation } from 'wouter';
+import { useAuth } from '@/hooks/useAuth';
+import UserMenu from './user-menu';
+import MobileMenu from './mobile-menu';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Gavel } from "lucide-react";
-import CreateAuctionForm from "../auctions/create-auction-form";
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Gavel } from 'lucide-react';
+import CreateAuctionForm from '../auctions/create-auction-form';
 
 const Header = () => {
   const [location] = useLocation();
@@ -38,9 +38,9 @@ const Header = () => {
               <Link
                 href="/"
                 className={`${
-                  location === "/"
-                    ? "border-primary-500 text-gray-900"
-                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  location === '/'
+                    ? 'border-primary-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Dashboard
@@ -50,14 +50,13 @@ const Header = () => {
                   <Link
                     href="/my-auctions"
                     className={`${
-                      location === "/my-auctions"
-                        ? "border-primary-500 text-gray-900"
-                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      location === '/my-auctions'
+                        ? 'border-primary-500 text-gray-900'
+                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                     } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                   >
                     My Auctions
                   </Link>
-                 
                 </>
               )}
             </nav>
@@ -67,9 +66,9 @@ const Header = () => {
           <div className="hidden md:ml-6 md:flex md:items-center">
             {user ? (
               <>
-                <Button 
-                  variant="default" 
-                  className="mr-4" 
+                <Button
+                  variant="default"
+                  className="mr-4"
                   onClick={() => setCreateAuctionOpen(true)}
                 >
                   <span className="text-xs mr-2">+</span>
@@ -87,10 +86,10 @@ const Header = () => {
           {/* Mobile menu button */}
           <div className="flex items-center md:hidden">
             {user && (
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                className="mr-2" 
+              <Button
+                size="sm"
+                variant="ghost"
+                className="mr-2"
                 onClick={() => setCreateAuctionOpen(true)}
               >
                 <span className="text-xs mr-1">+</span>

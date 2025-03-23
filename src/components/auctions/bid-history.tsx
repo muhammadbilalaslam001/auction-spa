@@ -1,8 +1,8 @@
-import { Bid } from "@/types";
-import { formatRelativeTime, formatCurrency } from "@/utils/format";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Bid } from '@/types';
+import { formatRelativeTime, formatCurrency } from '@/utils/format';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface BidHistoryProps {
   bids: Bid[];
@@ -12,27 +12,27 @@ interface BidHistoryProps {
 const BidHistory = ({ bids, isLoading }: BidHistoryProps) => {
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map(part => part[0])
-      .join("")
+      .join('')
       .toUpperCase();
   };
-  
+
   const getUserColor = (userId: string) => {
     const colors = [
-      "bg-red-100 text-red-700",
-      "bg-green-100 text-green-700",
-      "bg-blue-100 text-blue-700",
-      "bg-yellow-100 text-yellow-700",
-      "bg-purple-100 text-purple-700",
-      "bg-indigo-100 text-indigo-700",
-      "bg-pink-100 text-pink-700",
+      'bg-red-100 text-red-700',
+      'bg-green-100 text-green-700',
+      'bg-blue-100 text-blue-700',
+      'bg-yellow-100 text-yellow-700',
+      'bg-purple-100 text-purple-700',
+      'bg-indigo-100 text-indigo-700',
+      'bg-pink-100 text-pink-700',
     ];
-    
-    const hash = userId.split("").reduce((acc, char) => {
+
+    const hash = userId.split('').reduce((acc, char) => {
       return acc + char.charCodeAt(0);
     }, 0);
-    
+
     return colors[hash % colors.length];
   };
 
@@ -99,7 +99,7 @@ const BidHistory = ({ bids, isLoading }: BidHistoryProps) => {
       <ScrollArea className="h-64 mt-3">
         <div className="flow-root">
           <ul role="list" className="-my-4 divide-y divide-gray-200">
-            {bids.map((bid) => (
+            {bids.map(bid => (
               <li key={bid.id} className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">

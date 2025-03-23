@@ -1,28 +1,19 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Auction, AuctionStatus, CreateAuctionDto } from "@/types";
-import { auctionsApi } from "@/api/api";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Auction, AuctionStatus, CreateAuctionDto } from '@/types';
+import { auctionsApi } from '@/api/api';
 
-export function useAuctions(params?: { 
-  skip?: number; 
-  take?: number; 
-  status?: AuctionStatus;
-}) {
+export function useAuctions(params?: { skip?: number; take?: number; status?: AuctionStatus }) {
   const queryClient = useQueryClient();
-  
+
   // Get all auctions
-  const {
-    data,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["auctions", params],
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['auctions', params],
     queryFn: async () => {
       const response = await auctionsApi.getAll(params);
-      return  response;
+      return response;
     },
   });
-  
+
   const auctions = data || [];
 
   // Create auction mutation
@@ -33,7 +24,7 @@ export function useAuctions(params?: {
   } = useMutation({
     mutationFn: (data: CreateAuctionDto) => auctionsApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
   });
 
@@ -46,8 +37,8 @@ export function useAuctions(params?: {
     mutationFn: ({ id, data }: { id: string; data: Partial<Auction> }) =>
       auctionsApi.update(id, data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
-      queryClient.invalidateQueries({ queryKey: ["auction", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
+      queryClient.invalidateQueries({ queryKey: ['auction', variables.id] });
     },
   });
 
@@ -59,7 +50,7 @@ export function useAuctions(params?: {
   } = useMutation({
     mutationFn: (id: string) => auctionsApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
   });
 
@@ -72,8 +63,8 @@ export function useAuctions(params?: {
     mutationFn: ({ id, status }: { id: string; status: AuctionStatus }) =>
       auctionsApi.updateStatus(id, status),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
-      queryClient.invalidateQueries({ queryKey: ["auction", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
+      queryClient.invalidateQueries({ queryKey: ['auction', variables.id] });
     },
   });
 
@@ -99,21 +90,20 @@ export function useAuctions(params?: {
 
 export function useAuction(id: string) {
   const queryClient = useQueryClient();
-  
+
   const {
     data: auction,
     isLoading,
     error,
     refetch,
   } = useQuery({
-    queryKey: ["auction", id],
+    queryKey: ['auction', id],
     queryFn: async () => {
       const response = await auctionsApi.getById(id);
       return response.data;
     },
     enabled: !!id,
   });
-  
 
   // Update auction mutation
   const {
@@ -123,8 +113,8 @@ export function useAuction(id: string) {
   } = useMutation({
     mutationFn: (data: Partial<Auction>) => auctionsApi.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
-      queryClient.invalidateQueries({ queryKey: ["auction", id] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
+      queryClient.invalidateQueries({ queryKey: ['auction', id] });
     },
   });
 
@@ -136,7 +126,7 @@ export function useAuction(id: string) {
   } = useMutation({
     mutationFn: () => auctionsApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
     },
   });
 
@@ -148,8 +138,8 @@ export function useAuction(id: string) {
   } = useMutation({
     mutationFn: (status: AuctionStatus) => auctionsApi.updateStatus(id, status),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auctions"] });
-      queryClient.invalidateQueries({ queryKey: ["auction", id] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
+      queryClient.invalidateQueries({ queryKey: ['auction', id] });
     },
   });
 

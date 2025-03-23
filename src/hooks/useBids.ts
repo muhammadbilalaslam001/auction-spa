@@ -1,27 +1,21 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Bid, CreateBidDto } from "@/types";
-import { bidsApi } from "@/api/api";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Bid, CreateBidDto } from '@/types';
+import { bidsApi } from '@/api/api';
 
 export function useBids(auctionId?: string) {
   const queryClient = useQueryClient();
-  
+
   // Get bids for an auction
-  const {
-    data, 
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["bids", auctionId],
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['bids', auctionId],
     queryFn: async () => {
       const response = await bidsApi.getByAuctionId(auctionId!);
       return response;
     },
     enabled: !!auctionId,
-  });  
+  });
 
   const bids = data || [];
-
 
   // Create bid mutation
   const {
@@ -32,10 +26,10 @@ export function useBids(auctionId?: string) {
     mutationFn: (data: CreateBidDto) => bidsApi.create(data),
     onSuccess: () => {
       if (auctionId) {
-        queryClient.invalidateQueries({ queryKey: ["bids", auctionId] });
-        queryClient.invalidateQueries({ queryKey: ["auction", auctionId] });
+        queryClient.invalidateQueries({ queryKey: ['bids', auctionId] });
+        queryClient.invalidateQueries({ queryKey: ['auction', auctionId] });
       }
-      queryClient.invalidateQueries({ queryKey: ["userBids"] });
+      queryClient.invalidateQueries({ queryKey: ['userBids'] });
     },
   });
 
@@ -58,7 +52,7 @@ export function useUserBids() {
     error,
     refetch,
   } = useQuery<Bid[]>({
-    queryKey: ["userBids"],
+    queryKey: ['userBids'],
     queryFn: () => bidsApi.getUserBids(),
   });
 

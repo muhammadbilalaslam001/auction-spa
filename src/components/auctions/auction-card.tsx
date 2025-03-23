@@ -1,25 +1,25 @@
-import { Link } from "wouter";
-import { Auction } from "@/types";
-import { StatusBadge } from "../shared/status-badge";
-import { formatCurrency, formatTimeLeft } from "@/utils/format";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Link } from 'wouter';
+import { Auction } from '@/types';
+import { StatusBadge } from '../shared/status-badge';
+import { formatCurrency, formatTimeLeft } from '@/utils/format';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface AuctionCardProps {
   auction: Auction;
 }
 
 const AuctionCard = ({ auction }: AuctionCardProps) => {
-  const isActive = auction.status === "ACTIVE";
-  const isDraft = auction.status === "DRAFT";
-  
+  const isActive = auction.status === 'ACTIVE';
+  const isDraft = auction.status === 'DRAFT';
+
   const getEndTimeDisplay = () => {
     if (isActive) {
       return formatTimeLeft(new Date(auction.endDate));
     } else if (isDraft) {
-      return "Not Started";
+      return 'Not Started';
     } else {
-      return "Ended";
+      return 'Ended';
     }
   };
 
@@ -46,40 +46,28 @@ const AuctionCard = ({ auction }: AuctionCardProps) => {
           <StatusBadge status={auction.status} />
         </div>
       </div>
-      
+
       <CardContent className="p-4">
         <h3 className="text-lg font-medium text-gray-900 truncate">{auction.title}</h3>
         <p className="mt-1 text-sm text-gray-500 line-clamp-2 h-10">{auction.description}</p>
-        
+
         <div className="mt-3 flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-500">
-              {isDraft ? "Starting bid" : "Current bid"}
-            </p>
+            <p className="text-sm text-gray-500">{isDraft ? 'Starting bid' : 'Current bid'}</p>
             <p className="text-lg font-semibold text-gray-900">
               {formatCurrency(auction.currentPrice || auction.startPrice)}
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500 text-right">
-              {isActive ? "Ends in" : "Status"}
-            </p>
-            <p className="text-sm font-medium text-secondary-600">
-              {getEndTimeDisplay()}
-            </p>
+            <p className="text-sm text-gray-500 text-right">{isActive ? 'Ends in' : 'Status'}</p>
+            <p className="text-sm font-medium text-secondary-600">{getEndTimeDisplay()}</p>
           </div>
         </div>
       </CardContent>
-      
+
       <CardFooter className="p-4 pt-0">
-        <Button
-          variant={isDraft ? "outline" : "default"}
-          asChild
-          className="w-full"
-        >
-          <Link href={`/auction/${auction.id}`}>
-            {isDraft ? "Edit Draft" : "View Details"}
-          </Link>
+        <Button variant={isDraft ? 'outline' : 'default'} asChild className="w-full">
+          <Link href={`/auction/${auction.id}`}>{isDraft ? 'Edit Draft' : 'View Details'}</Link>
         </Button>
       </CardFooter>
     </Card>

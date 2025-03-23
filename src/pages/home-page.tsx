@@ -1,36 +1,36 @@
-import { useState } from "react";
-import { useAuctions } from "@/hooks/useAuctions";
-import { AuctionStatus } from "@/types";
-import AuctionGrid from "@/components/auctions/auction-grid";
-import AuctionFilters from "@/components/auctions/auction-filters";
-import { 
-  Pagination, 
-  PaginationContent, 
-  PaginationItem, 
-  PaginationLink, 
+import { useState } from 'react';
+import { useAuctions } from '@/hooks/useAuctions';
+import { AuctionStatus } from '@/types';
+import AuctionGrid from '@/components/auctions/auction-grid';
+import AuctionFilters from '@/components/auctions/auction-filters';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
   PaginationEllipsis,
   PaginationPrevious,
-  PaginationNext
-} from "@/components/ui/pagination";
+  PaginationNext,
+} from '@/components/ui/pagination';
 
 const ITEMS_PER_PAGE = 8;
 
 const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<AuctionStatus | "ALL">("ALL");
+  const [statusFilter, setStatusFilter] = useState<AuctionStatus | 'ALL'>('ALL');
 
   const { auctions = [], isLoading } = useAuctions({
     skip: (currentPage - 1) * ITEMS_PER_PAGE,
     take: ITEMS_PER_PAGE,
-    status: statusFilter !== "ALL" ? statusFilter : undefined,
+    status: statusFilter !== 'ALL' ? statusFilter : undefined,
   });
 
-  const handleFilterChange = (filter: AuctionStatus | "ALL") => {
+  const handleFilterChange = (filter: AuctionStatus | 'ALL') => {
     setStatusFilter(filter);
     setCurrentPage(1);
   };
 
-  const totalCount=auctions?.length;
+  const totalCount = auctions?.length;
 
   // Calculate total pages based on total count of auctions
   const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
@@ -44,10 +44,7 @@ const HomePage = () => {
             <p className="mt-1 text-sm text-gray-500">Browse and bid on active auctions</p>
           </div>
           <div className="mt-4 md:mt-0">
-            <AuctionFilters
-              currentFilter={statusFilter}
-              onFilterChange={handleFilterChange}
-            />
+            <AuctionFilters currentFilter={statusFilter} onFilterChange={handleFilterChange} />
           </div>
         </div>
 
@@ -63,7 +60,7 @@ const HomePage = () => {
                   className={`cursor-pointer ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
                 />
               </PaginationItem>
-              
+
               {Array.from({ length: Math.min(3, totalPages) }).map((_, i) => (
                 <PaginationItem key={i}>
                   <PaginationLink
@@ -75,7 +72,7 @@ const HomePage = () => {
                   </PaginationLink>
                 </PaginationItem>
               ))}
-              
+
               {totalPages > 3 && currentPage <= 3 && (
                 <>
                   <PaginationItem>
@@ -91,7 +88,7 @@ const HomePage = () => {
                   </PaginationItem>
                 </>
               )}
-              
+
               {totalPages > 3 && currentPage > 3 && currentPage < totalPages - 2 && (
                 <>
                   <PaginationItem>
@@ -111,7 +108,7 @@ const HomePage = () => {
                   </PaginationItem>
                 </>
               )}
-              
+
               {totalPages > 3 && currentPage >= totalPages - 2 && currentPage !== totalPages && (
                 <>
                   <PaginationItem>
@@ -133,7 +130,7 @@ const HomePage = () => {
                   })}
                 </>
               )}
-              
+
               <PaginationItem>
                 <PaginationNext
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}

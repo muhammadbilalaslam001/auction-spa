@@ -1,22 +1,16 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Auction } from "@/types";
-import { useBids } from "@/hooks/useBids";
-import { useAuth } from "@/hooks/useAuth";
-import { formatCurrency } from "../../utils/format";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Link } from "wouter";
-import { toast } from "sonner";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Auction } from '@/types';
+import { useBids } from '@/hooks/useBids';
+import { useAuth } from '@/hooks/useAuth';
+import { formatCurrency } from '../../utils/format';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { Link } from 'wouter';
+import { toast } from 'sonner';
 
 interface BidFormProps {
   auction: Auction;
@@ -26,12 +20,12 @@ interface BidFormProps {
 const BidForm = ({ auction, highestBid }: BidFormProps) => {
   const { user } = useAuth();
   const { createBid, isCreatingBid } = useBids();
-  const minimumBid = Math.max(highestBid, auction.startPrice) + 10; 
+  const minimumBid = Math.max(highestBid, auction.startPrice) + 10;
 
   const formSchema = z.object({
     amount: z.coerce
       .number()
-      .positive("Bid amount must be positive")
+      .positive('Bid amount must be positive')
       .min(minimumBid, `Bid must be at least ${formatCurrency(minimumBid)}`),
   });
 
@@ -47,7 +41,7 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
   // Handle form submission
   const onSubmit = async (data: FormValues) => {
     if (!user) {
-      toast("Please sign in to place a bid");
+      toast('Please sign in to place a bid');
       return;
     }
 
@@ -64,7 +58,7 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
         amount: data.amount + 10,
       });
     } catch (error: any) {
-      toast("There was an error placing your bid");
+      toast('There was an error placing your bid');
     }
   };
 
@@ -72,15 +66,13 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
   const isOwnAuction = user && auction.userId === user.id;
 
   // Check if auction is active
-  const isActive = auction.status === "ACTIVE";
+  const isActive = auction.status === 'ACTIVE';
 
   if (!isActive) {
     return (
       <div className="mt-6 bg-gray-50 rounded-lg p-4">
         <h3 className="text-sm font-medium text-gray-900">Bidding Unavailable</h3>
-        <p className="text-sm text-gray-500 mt-1">
-          This auction is not currently active.
-        </p>
+        <p className="text-sm text-gray-500 mt-1">This auction is not currently active.</p>
       </div>
     );
   }
@@ -89,9 +81,7 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
     return (
       <div className="mt-6 bg-gray-50 rounded-lg p-4">
         <h3 className="text-sm font-medium text-gray-900">Your Auction</h3>
-        <p className="text-sm text-gray-500 mt-1">
-          You cannot bid on your own auction.
-        </p>
+        <p className="text-sm text-gray-500 mt-1">You cannot bid on your own auction.</p>
       </div>
     );
   }
@@ -100,9 +90,7 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
     return (
       <div className="mt-6 bg-gray-50 rounded-lg p-4">
         <h3 className="text-sm font-medium text-gray-900">Authentication Required</h3>
-        <p className="text-sm text-gray-500 mt-1">
-          Please sign in to place a bid.
-        </p>
+        <p className="text-sm text-gray-500 mt-1">Please sign in to place a bid.</p>
         <Button asChild className="mt-2 w-full">
           <Link href="/login">Sign In</Link>
         </Button>
@@ -113,10 +101,8 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
   return (
     <div className="mt-6">
       <h3 className="text-sm font-medium text-gray-900">Place your bid</h3>
-      <p className="text-sm text-gray-500 mt-1">
-        Minimum bid: {formatCurrency(minimumBid)}
-      </p>
-      
+      <p className="text-sm text-gray-500 mt-1">Minimum bid: {formatCurrency(minimumBid)}</p>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-2">
           <FormField
@@ -143,25 +129,28 @@ const BidForm = ({ auction, highestBid }: BidFormProps) => {
             )}
           />
 
-          <Button
-            type="submit"
-            className="mt-3 w-full"
-            disabled={isCreatingBid}
-          >
+          <Button type="submit" className="mt-3 w-full" disabled={isCreatingBid}>
             {isCreatingBid ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Processing...
               </>
             ) : (
-              "Place Bid"
+              'Place Bid'
             )}
           </Button>
         </form>
       </Form>
-      
+
       <div className="mt-3 text-xs text-gray-500">
-        By placing a bid, you agree to our <a href="#" className="text-primary-600 hover:text-primary-500">Terms of Service</a> and <a href="#" className="text-primary-600 hover:text-primary-500">Auction Rules</a>
+        By placing a bid, you agree to our{' '}
+        <a href="#" className="text-primary-600 hover:text-primary-500">
+          Terms of Service
+        </a>{' '}
+        and{' '}
+        <a href="#" className="text-primary-600 hover:text-primary-500">
+          Auction Rules
+        </a>
       </div>
     </div>
   );

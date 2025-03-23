@@ -1,22 +1,22 @@
-import { useEffect, useState ,useContext} from "react";
-import { Link, useParams } from "wouter";
+import { useEffect, useState, useContext } from 'react';
+import { Link, useParams } from 'wouter';
 
-import { useAuction } from "@/hooks/useAuctions";
-import { useBids } from "@/hooks/useBids";
-import { formatCurrency, formatDate } from "@/utils/format";
-import { Auction, Bid } from "@/types";
-import { StatusBadge } from "@/components/shared/status-badge";
-import BidForm from "@/components/auctions/bid-form";
-import BidHistory from "@/components/auctions/bid-history";
-import CountdownTimer from "../components/auctions/count-down-timer";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft } from "lucide-react";
+import { useAuction } from '@/hooks/useAuctions';
+import { useBids } from '@/hooks/useBids';
+import { formatCurrency, formatDate } from '@/utils/format';
+import { Auction, Bid } from '@/types';
+import { StatusBadge } from '@/components/shared/status-badge';
+import BidForm from '@/components/auctions/bid-form';
+import BidHistory from '@/components/auctions/bid-history';
+import CountdownTimer from '../components/auctions/count-down-timer';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ChevronLeft } from 'lucide-react';
 
-import { AuthContext} from "@/context/AuthContext"
-import { useAuctionSocket } from "@/hooks/useAuctionSocket";
-import { cookieUtils } from "@/utils/cookies";
+import { AuthContext } from '@/context/AuthContext';
+import { useAuctionSocket } from '@/hooks/useAuctionSocket';
+import { cookieUtils } from '@/utils/cookies';
 
 const AuctionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,14 +24,13 @@ const AuctionPage = () => {
   const { bids, isLoading: isLoadingBids } = useBids(id);
   const [liveAuction, setLiveAuction] = useState<Auction | null>(null);
   const [liveBids, setLiveBids] = useState<Bid[]>([]);
-  const [loading,setLoading]=useState(false);
-  const auth =useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const auth = useContext(AuthContext);
   const token = cookieUtils.getToken();
 
-  useEffect(()=>{
-    setLoading(auth.isConnected??false);
-  },[auth.isConnected])
-
+  useEffect(() => {
+    setLoading(auth.isConnected ?? false);
+  }, [auth.isConnected]);
 
   useEffect(() => {
     if (auction) {
@@ -45,29 +44,26 @@ const AuctionPage = () => {
     }
   }, [bids]);
 
-
   useEffect(() => {
-    if(!loading&&id){
-      auth.joinAuction(id)
+    if (!loading && id) {
+      auth.joinAuction(id);
     }
-  }, [loading,id]);
+  }, [loading, id]);
 
   // Handle WebSocket events
   const { isConnected, joinAuction, leaveAuction } = useAuctionSocket({
-    token: token??"",
+    token: token ?? '',
     auctionId: id,
-    onAuctionUpdate: (data) => {
+    onAuctionUpdate: data => {
       // Update live auction data
-      setLiveAuction((prev) => ({
+      setLiveAuction(prev => ({
         ...prev!,
         currentPrice: data.currentPrice,
       }));
 
       // Update live bids
-      setLiveBids((prevBids:any) => {
-        const existingBidIndex = prevBids.findIndex(
-          (bid:any) => bid.id === data.highestBid.id
-        );
+      setLiveBids((prevBids: any) => {
+        const existingBidIndex = prevBids.findIndex((bid: any) => bid.id === data.highestBid.id);
 
         if (existingBidIndex === -1) {
           return [data.highestBid, ...prevBids];
@@ -88,7 +84,6 @@ const AuctionPage = () => {
     };
   }, [isConnected, id]);
 
-
   // Determine highest bid amount
   const getHighestBidAmount = () => {
     if (liveBids && liveBids.length > 0) {
@@ -100,9 +95,9 @@ const AuctionPage = () => {
   // Get initials from name
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map(part => part[0])
-      .join("")
+      .join('')
       .toUpperCase();
   };
   // Loading state
@@ -111,12 +106,15 @@ const AuctionPage = () => {
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
-            <Link href="/" className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
+            >
               <ChevronLeft className="mr-1 h-4 w-4" />
               Back to Dashboard
             </Link>
           </div>
-          
+
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
             <div className="md:flex">
               <div className="md:w-1/2">
@@ -153,15 +151,20 @@ const AuctionPage = () => {
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
-            <Link href="/" className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
+            >
               <ChevronLeft className="mr-1 h-4 w-4" />
               Back to Dashboard
             </Link>
           </div>
-          
+
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm p-8 text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Auction Not Found</h2>
-            <p className="text-gray-600 mb-6">The auction you're looking for doesn't exist or has been removed.</p>
+            <p className="text-gray-600 mb-6">
+              The auction you're looking for doesn't exist or has been removed.
+            </p>
             <Button asChild>
               <Link href="/">Return to Dashboard</Link>
             </Button>
@@ -175,12 +178,15 @@ const AuctionPage = () => {
     <div className="py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <Link href="/" className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500">
+          <Link
+            href="/"
+            className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
+          >
             <ChevronLeft className="mr-1 h-4 w-4" />
             Back to Dashboard
           </Link>
         </div>
-        
+
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
           <div className="md:flex">
             {/* Left Column: Image and Description */}
@@ -220,7 +226,7 @@ const AuctionPage = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Right Column: Auction Details and Bidding */}
             <div className="md:w-1/2 border-t md:border-t-0 md:border-l border-gray-200">
               <div className="p-6">
@@ -230,7 +236,7 @@ const AuctionPage = () => {
                     <p className="mt-1 text-sm text-gray-500">Bid now to win this item</p>
                   </div>
                   <div className="flex flex-col items-end">
-                    {liveAuction.status === "ACTIVE" && (
+                    {liveAuction.status === 'ACTIVE' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800">
                         <span className="relative flex h-2 w-2 mr-1.5">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -241,7 +247,7 @@ const AuctionPage = () => {
                     )}
                   </div>
                 </div>
-                
+
                 {/* Current Price and Timer */}
                 <div className="mt-6 bg-gray-50 rounded-lg p-4">
                   <div className="flex justify-between">
@@ -251,15 +257,18 @@ const AuctionPage = () => {
                         {formatCurrency(liveAuction.currentPrice || liveAuction.startPrice)}
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        <span className="font-medium text-gray-900">{liveBids.length} bids</span> · 
-                        <span className="text-gray-500"> {new Set(liveBids.map(b => b.userId)).size} bidders</span>
+                        <span className="font-medium text-gray-900">{liveBids.length} bids</span> ·
+                        <span className="text-gray-500">
+                          {' '}
+                          {new Set(liveBids.map(b => b.userId)).size} bidders
+                        </span>
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-gray-500">
-                        {liveAuction.status === "ACTIVE" ? "Auction ends in" : "Auction status"}
+                        {liveAuction.status === 'ACTIVE' ? 'Auction ends in' : 'Auction status'}
                       </p>
-                      {liveAuction.status === "ACTIVE" ? (
+                      {liveAuction.status === 'ACTIVE' ? (
                         <>
                           <CountdownTimer endDate={new Date(liveAuction.endDate)} />
                           <p className="mt-1 text-xs text-gray-500">
@@ -268,19 +277,16 @@ const AuctionPage = () => {
                         </>
                       ) : (
                         <p className="mt-1 text-sm font-medium text-gray-600">
-                          {liveAuction.status === "COMPLETED" ? "Ended" : "Not Started"}
+                          {liveAuction.status === 'COMPLETED' ? 'Ended' : 'Not Started'}
                         </p>
                       )}
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Bidding Form */}
-                <BidForm 
-                  auction={liveAuction} 
-                  highestBid={getHighestBidAmount()} 
-                />
-                
+                <BidForm auction={liveAuction} highestBid={getHighestBidAmount()} />
+
                 {/* Seller Info */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <h3 className="text-sm font-medium text-gray-900">Seller Information</h3>
@@ -288,19 +294,19 @@ const AuctionPage = () => {
                     <div className="flex-shrink-0">
                       <Avatar>
                         <AvatarFallback className="bg-primary-100 text-primary-700">
-                          {liveAuction.user ? getInitials(liveAuction.user.name) : "??"}
+                          {liveAuction.user ? getInitials(liveAuction.user.name) : '??'}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="ml-3">
                       <p className="text-sm font-medium text-gray-900">
-                        {liveAuction.user ? liveAuction.user.name : "Unknown Seller"}
+                        {liveAuction.user ? liveAuction.user.name : 'Unknown Seller'}
                       </p>
                       <p className="text-xs text-gray-500">Member since January 2023</p>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Bid History */}
                 <BidHistory bids={liveBids} isLoading={isLoadingBids} />
               </div>

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
-import { User } from "@/types";
+import { useState } from 'react';
+import { Link } from 'wouter';
+import { useAuth } from '@/hooks/useAuth';
+import { User } from '@/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface UserMenuProps {
   user: User;
@@ -22,20 +22,19 @@ const UserMenu = ({ user }: UserMenuProps) => {
 
   // Get initials from user name
   const getInitials = (name?: string) => {
-    if (!name) return ""; // Return empty string if name is undefined or empty
-  
+    if (!name) return ''; // Return empty string if name is undefined or empty
+
     return name
-      .split(" ")
-      .map((part) => part[0] || "") // Handle cases where part is empty
-      .join("")
+      .split(' ')
+      .map(part => part[0] || '') // Handle cases where part is empty
+      .join('')
       .toUpperCase();
   };
-  
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button 
+        <button
           className="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           aria-expanded={open}
         >
@@ -58,7 +57,7 @@ const UserMenu = ({ user }: UserMenuProps) => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
+        <DropdownMenuItem
           onClick={logout}
           className="cursor-pointer text-red-600 focus:text-red-700"
         >
