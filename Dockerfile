@@ -1,50 +1,32 @@
-# Build stage
+# Step 1: Build the app
 FROM node:20-alpine AS builder
 
+# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Install dependencies
 COPY package*.json ./
-
-# Install all dependencies (including dev dependencies)
 RUN npm ci
 
-# Copy source code
+# Copy the source code
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
-
-# Build the application
+# Build the app
 RUN npm run build
 
-# Development stage (for development use)
-FROM node:20-alpine AS development
+# Step 2: Serve the built app
+FROM node:20-alpine AS production
+
+# Install a simple static file server
+RUN npm install -g serve
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy built app from builder
+COPY --from=builder /app/dist ./dist
 
-# Install all dependencies (including dev dependencies for development mode)
-RUN npm ci
+# Expose port
+EXPOSE 3002
 
-# Copy prisma schema and migrations
-COPY prisma ./prisma
-
-# Generate Prisma client
-RUN npx prisma generate
-
-# Use the development image by default
-FROM development
-
-# Copy source code for live reloading
-WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY . .
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Default development command (start:dev is defined in package.json)
-CMD ["npm", "run", "start:dev"]
+# Serve the app
+CMD ["serve", "dist", "-l", "3002"]
