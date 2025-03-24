@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > ssh_key
           chmod 600 ssh_key
-          ssh -i ssh_key $EC2_USER@$EC2_HOST "echo SSH connection successful"
+          ssh -i ssh_key -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST "echo SSH connection successful"
           scp -i ssh_key frontend-app.tar $EC2_USER@$EC2_HOST:/tmp/frontend-app.tar
           ssh -i ssh_key $EC2_USER@$EC2_HOST << EOF
             docker load < /tmp/frontend-app.tar
