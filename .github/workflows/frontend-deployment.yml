@@ -33,16 +33,14 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > ssh_key
           chmod 600 ssh_key
-
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
           ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
-
           scp -i ssh_key frontend-app.tar $EC2_USER@$EC2_HOST:/tmp/frontend-app.tar
-
           ssh -i ssh_key $EC2_USER@$EC2_HOST << EOF
             docker load < /tmp/frontend-app.tar
             docker stop frontend-container || true
             docker rm frontend-container || true
             docker run -d -p 3002:3002 --name frontend-container frontend-app
           EOF
-
           rm ssh_key
