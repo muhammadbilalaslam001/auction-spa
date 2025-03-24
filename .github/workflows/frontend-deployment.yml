@@ -31,7 +31,7 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
         run: |
-          echo "$PRIVATE_KEY" > ssh_key
+          echo -e "$PRIVATE_KEY" > ssh_key
           chmod 600 ssh_key
           ssh -i ssh_key -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST "echo SSH connection successful"
           scp -i ssh_key -o StrictHostKeyChecking=no frontend-app.tar $EC2_USER@$EC2_HOST:/tmp/frontend-app.tar
